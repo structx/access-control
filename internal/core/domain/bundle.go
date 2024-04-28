@@ -2,8 +2,10 @@ package domain
 
 import "context"
 
-// Bundle service global interface
+// Bundler service global interface
 type Bundler interface {
+	// Subscribe service to all subscription topics
 	Subscribe(ctx context.Context) error
+	// Close external service connections
 	Close() error
 }
