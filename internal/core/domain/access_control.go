@@ -25,18 +25,18 @@ type EntryResponse struct {
 	Granted bool `json:"granted"`
 }
 
-// NewServiceRegistered
+// NewServiceRegistered model
 type NewServiceRegistered struct {
 	Policy *Policy
 }
 
-// ServiceRegistered
+// ServiceRegistered model
 type ServiceRegistered struct{}
 
-// UpdateRegisteredService
+// UpdateRegisteredService application model
 type UpdateRegisteredService struct{}
 
-// UpdateAccessControlList
+// UpdateAccessControlList application model
 type UpdateAccessControlList struct {
 	Resource string
 	Subject  string

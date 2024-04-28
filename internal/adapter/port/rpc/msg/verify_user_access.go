@@ -1,7 +1,7 @@
 package msg
 
-// VerifyUserAccessPayload
+// VerifyUserAccessPayload controller model
 type VerifyUserAccessPayload struct{}
 
-// VerifyUserAccessResponse
+// VerifyUserAccessResponse controller model
 type VerifyUserAccessResponse struct{}

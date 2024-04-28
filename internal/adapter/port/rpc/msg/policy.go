@@ -2,7 +2,7 @@ package msg
 
 import "time"
 
-// Policy
+// Policy controller model
 type Policy struct {
 	Subject    string     `json:"subject"`
 	Permission string     `json:"permission"`

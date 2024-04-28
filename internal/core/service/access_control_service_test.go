@@ -9,7 +9,7 @@ import (
 
 type AccessControlSuite struct {
 	suite.Suite
-	ac *service.AccessControl
+	_ *service.AccessControl
 }
 
 func (suite *AccessControlSuite) SetupTest() {}

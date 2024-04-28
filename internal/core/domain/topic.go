@@ -1,47 +1,46 @@
 package domain
 
-// Publish
+// Publish application publish topics
 type Publish string
 
-// Subscriptions
+// Subscriptions application subscribe topics
 type Subscriptions string
 
-// RequestResponse
+// RequestResponse application request/response topics
 type RequestResponse string
 
 const (
-
-	// UserAccessGranted
+	// UserAccessGranted user access granted
 	UserAccessGranted Subscriptions = "user_access_granted"
-	// UserAccessDenied
+	// UserAccessDenied user access denied
 	UserAccessDenied Subscriptions = "user_access_denied"
-	// ServiceAccessGranted
+	// ServiceAccessGranted service access granted
 	ServiceAccessGranted Subscriptions = "service_access_granted"
-	// ModifyAccessControlList
+	// ModifyAccessControlList modify access control list
 	ModifyAccessControlList Subscriptions = "modify_access_control_list"
 
-	// VerifyUserAcess
+	// VerifyUserAccess verify user access
 	VerifyUserAccess RequestResponse = "verify_user_access"
-	// VerifyServiceAccess
+	// VerifyServiceAccess verify service access
 	VerifyServiceAccess RequestResponse = "verify_service_access"
 )
 
-// String
+// String stringify topic
 func (p Publish) String() string {
 	return string(p)
 }
 
-// List
-func (p Publish) List() []Publish {
+// ListPublish topics
+func ListPublish() []Publish {
 	return []Publish{}
 }
 
-// String
+// String stringify topic
 func (s Subscriptions) String() string {
 	return string(s)
 }
 
-// ListSubscriptions
+// ListSubscriptions topics
 func ListSubscriptions() []Subscriptions {
 	return []Subscriptions{
 		UserAccessDenied,
@@ -51,12 +50,12 @@ func ListSubscriptions() []Subscriptions {
 	}
 }
 
-// String
+// String stringify topic
 func (rr RequestResponse) String() string {
 	return string(rr)
 }
 
-// List
+// List request/response topics
 func (rr RequestResponse) List() []RequestResponse {
 	return []RequestResponse{VerifyUserAccess}
 }

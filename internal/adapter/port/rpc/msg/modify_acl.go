@@ -1,3 +1,4 @@
+// Package msg controller models
 package msg
 
 import (
@@ -5,17 +6,17 @@ import (
 	"time"
 )
 
-// ModifyACLPayload
+// ModifyACLPayload controller model
 type ModifyACLPayload struct {
 	Subject  string  `json:"subject"`
 	Resource string  `json:"resource"`
 	Policy   *Policy `json:"policy"`
 }
 
-// ModifyACLResponse
+// ModifyACLResponse controller model
 type ModifyACLResponse struct{}
 
-// Validate
+// Validate payload
 func (macl *ModifyACLPayload) Validate() error {
 
 	if macl.Policy == nil {

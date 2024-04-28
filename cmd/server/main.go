@@ -51,7 +51,7 @@ func registerHooks(lc fx.Lifecycle, bundler domain.Bundler) error {
 
 				return result
 			},
-			OnStop: func(ctx context.Context) error {
+			OnStop: func(_ context.Context) error {
 
 				var result error
 

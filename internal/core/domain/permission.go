@@ -1,20 +1,20 @@
 package domain
 
-// Permission
+// Permission application permission enum
 type Permission string
 
 const (
-	// Read
+	// Read read
 	Read Permission = "read"
-	// Write
+	// Write write
 	Write Permission = "write"
-	// Delete
+	// Delete delete
 	Delete Permission = "delete"
-	// Execute
+	// Execute execute
 	Execute Permission = "execute"
 )
 
-// String
+// String stringify permission
 func (p Permission) String() string {
 	return string(p)
 }

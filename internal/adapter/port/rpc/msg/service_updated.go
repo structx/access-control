@@ -1,7 +1,7 @@
 package msg
 
-// ServiceUpdatedPayload
+// ServiceUpdatedPayload controller model
 type ServiceUpdatedPayload struct{}
 
-// ServiceUpdatedResponse
+// ServiceUpdatedResponse controller model
 type ServiceUpdatedResponse struct{}

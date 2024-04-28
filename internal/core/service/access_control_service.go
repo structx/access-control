@@ -26,7 +26,7 @@ func NewAccessControl(simpleGraph domain.Graph) *AccessControl {
 }
 
 // ModifyAccessControlList update existing access control list entry
-func (ac *AccessControl) ModifyAccessControlList(ctx context.Context, op *domain.UpdateAccessControlList) error {
+func (ac *AccessControl) ModifyAccessControlList(_ context.Context, op *domain.UpdateAccessControlList) error {
 
 	// retrieve vertex of target
 	target, err := ac.graph.GetVertex(op.Resource)
@@ -56,7 +56,7 @@ func (ac *AccessControl) ModifyAccessControlList(ctx context.Context, op *domain
 }
 
 // ServiceRegistered add new entry to access control list
-func (ac *AccessControl) ServiceRegistered(ctx context.Context, op *domain.NewServiceRegistered) (*domain.ServiceRegistered, error) {
+func (ac *AccessControl) ServiceRegistered(_ context.Context, op *domain.NewServiceRegistered) (*domain.ServiceRegistered, error) {
 
 	_, err := ac.graph.AddVertex(op.Policy)
 	if err != nil {
@@ -67,14 +67,14 @@ func (ac *AccessControl) ServiceRegistered(ctx context.Context, op *domain.NewSe
 }
 
 // ServiceUpdated todo
-func (ac *AccessControl) ServiceUpdated(ctx context.Context, op *domain.UpdateRegisteredService) error {
+func (ac *AccessControl) ServiceUpdated(_ context.Context, _ *domain.UpdateRegisteredService) error {
 	// TODO:
 	// implement handler
 	return nil
 }
 
-// VerifyServiceAccess
-func (ac *AccessControl) VerifyServiceAccess(ctx context.Context, ace *domain.AccessControlEntry) error {
+// VerifyServiceAccess with graph
+func (ac *AccessControl) VerifyServiceAccess(_ context.Context, ace *domain.AccessControlEntry) error {
 
 	granted := ac.graph.TraverseAndValidateData(ace.Subject, ace.Resource, ace.Permission)
 	if granted {
@@ -84,8 +84,8 @@ func (ac *AccessControl) VerifyServiceAccess(ctx context.Context, ace *domain.Ac
 	return errors.New("access denied")
 }
 
-// VerifyUserAccess
-func (ac *AccessControl) VerifyUserAccess(ctx context.Context, ace *domain.AccessControlEntry) error {
+// VerifyUserAccess with graph
+func (ac *AccessControl) VerifyUserAccess(_ context.Context, ace *domain.AccessControlEntry) error {
 
 	granted := ac.graph.TraverseAndValidateData(ace.Subject, ace.Resource, ace.Permission)
 	if granted {

@@ -1,13 +1,15 @@
+// Package graph implementation and provider
 package graph
 
 import (
+	"fmt"
 	"sync"
 
 	"github.com/trevatk/anastasia/internal/core/domain"
 	"golang.org/x/crypto/sha3"
 )
 
-// SimpleGraph
+// SimpleGraph dag implementation
 type SimpleGraph struct {
 	mtx      sync.RWMutex
 	vertices map[[28]byte]domain.Vertex
@@ -26,22 +28,37 @@ func New() *SimpleGraph {
 	}
 }
 
-// AddVertex
+// AddVertex to graph
 func (g *SimpleGraph) AddVertex(p *domain.Policy) (*domain.Vertex, error) {
-	return nil, nil
+
+	i := len(g.vertices)
+
+	keyHash := hashKey([]byte(fmt.Sprintf("%d", i)))
+	v := domain.Vertex{ID: keyHash, Tx: domain.Transaction{
+		ID:        hashKey([]byte(fmt.Sprintf("%d", 0))),
+		Subject:   [28]byte{},
+		Resource:  keyHash,
+		Signature: p.Signatures[0],
+	}}
+
+	g.vertices[keyHash] = v
+
+	return &v, nil
 }
 
-// GetVertx
+// GetVertex from graph
 func (g *SimpleGraph) GetVertex(key string) (*domain.Vertex, error) {
+
 	keyHash := hashKey([]byte(key))
-	if v, ok := g.vertices[keyHash]; !ok {
+	v, ok := g.vertices[keyHash]
+	if !ok {
 		return nil, &ErrNotFound{Key: keyHash[:]}
-	} else {
-		return &v, nil
 	}
+
+	return &v, nil
 }
 
-// AddEdge
+// AddEdge to vertex
 func (g *SimpleGraph) AddEdge(source *domain.Vertex, target *domain.Vertex, p *domain.Policy) (*domain.Edge, error) {
 
 	v, ok := g.vertices[target.ID]
@@ -63,13 +80,12 @@ func (g *SimpleGraph) AddEdge(source *domain.Vertex, target *domain.Vertex, p *d
 	return &e, nil
 }
 
+// TraverseAndValidateData iterate over edges and validate data
 func (g *SimpleGraph) TraverseAndValidateData(subject, resource string, permission domain.Permission) bool {
 
 	keyHash := hashKey([]byte(resource))
 
 	if _, ok := g.vertices[keyHash]; !ok {
-		// TODO:
-		// return err not found
 		return false
 	}
 
