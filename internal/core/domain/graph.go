@@ -27,4 +27,5 @@ type Graph interface {
 	AddVertex(*Policy) (*Vertex, error)
 	GetVertex(resource string) (*Vertex, error)
 	AddEdge(*Vertex, *Vertex, *Policy) (*Edge, error)
+	TraverseAndValidateData(subject, resource string, permission Permission) bool
 }

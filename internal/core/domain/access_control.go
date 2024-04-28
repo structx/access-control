@@ -3,8 +3,6 @@ package domain
 
 import (
 	"context"
-
-	"github.com/trevatk/anastasia/internal/adapter/port/rpc/msg"
 )
 
 // Policy application model
@@ -15,8 +13,40 @@ type Policy struct {
 	Signatures []string
 }
 
+// AccessControlEntry
+type AccessControlEntry struct {
+	Subject, Resource string
+	Permission        Permission
+}
+
+// NewServiceRegistered
+type NewServiceRegistered struct {
+	Policy *Policy
+}
+
+// ServiceRegistered
+type ServiceRegistered struct{}
+
+// UpdateRegisteredService
+type UpdateRegisteredService struct{}
+
+// UpdateAccessControlList
+type UpdateAccessControlList struct {
+	Resource string
+	Subject  string
+	Policy   *Policy
+}
+
 // AccessController required functionality for access service
 type AccessController interface {
-	// ModifyAccessControlList create a new policy and attach to target edges
-	ModifyAccessControlList(ctx context.Context, msg *msg.ModifyACLPayload) (*msg.ModifyACLResponse, error)
+	// ServiceRegistered add new entry to access control list
+	ServiceRegistered(context.Context, *NewServiceRegistered) (*ServiceRegistered, error)
+	// ServiceUpdated todo
+	ServiceUpdated(context.Context, *UpdateRegisteredService) error
+	// ModifyAccessControlList update existing access control list entry
+	ModifyAccessControlList(context.Context, *UpdateAccessControlList) error
+	// VerifyServiceAccess
+	VerifyServiceAccess(context.Context, *AccessControlEntry) error
+	// VerifyUserAccess
+	VerifyUserAccess(context.Context, *AccessControlEntry) error
 }

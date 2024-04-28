@@ -7,9 +7,7 @@ import (
 	"fmt"
 	"slices"
 
-	"github.com/trevatk/anastasia/internal/adapter/port/rpc/msg"
 	"github.com/trevatk/anastasia/internal/core/domain"
-	"github.com/trevatk/anastasia/internal/core/transform"
 )
 
 // AccessControl access controller implementation
@@ -27,35 +25,72 @@ func NewAccessControl(simpleGraph domain.Graph) *AccessControl {
 	}
 }
 
-// ModifyAccessControlList
-func (ac *AccessControl) ModifyAccessControlList(ctx context.Context, modify *msg.ModifyACLPayload) (*msg.ModifyACLResponse, error) {
+// ModifyAccessControlList update existing access control list entry
+func (ac *AccessControl) ModifyAccessControlList(ctx context.Context, op *domain.UpdateAccessControlList) error {
 
 	// retrieve vertex of target
-	target, err := ac.graph.GetVertex(modify.Resource)
+	target, err := ac.graph.GetVertex(op.Resource)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get vertex of resource %v", err)
+		return fmt.Errorf("failed to get vertex of resource %v", err)
 	}
 
 	// retrieve source of source
-	source, err := ac.graph.GetVertex(modify.Subject)
+	source, err := ac.graph.GetVertex(op.Subject)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get vertex of subject %v", err)
+		return fmt.Errorf("failed to get vertex of subject %v", err)
 	}
 
-	// transform policy
-	policy := transform.Policy(modify.Policy)
-
 	// verify target signature is in policy
-	ok := slices.Contains(policy.Signatures, target.Tx.Signature)
+	ok := slices.Contains(op.Policy.Signatures, target.Tx.Signature)
 	if !ok {
-		return nil, errors.New("policy does not include target signature")
+		return errors.New("policy does not include target signature")
 	}
 
 	// modify access control list
-	_, err = ac.graph.AddEdge(source, target, policy)
+	_, err = ac.graph.AddEdge(source, target, op.Policy)
 	if err != nil {
-		return nil, fmt.Errorf("failed to add edge %v", err)
+		return fmt.Errorf("failed to add edge %v", err)
 	}
 
-	return nil, nil
+	return nil
+}
+
+// ServiceRegistered add new entry to access control list
+func (ac *AccessControl) ServiceRegistered(ctx context.Context, op *domain.NewServiceRegistered) (*domain.ServiceRegistered, error) {
+
+	_, err := ac.graph.AddVertex(op.Policy)
+	if err != nil {
+		return nil, fmt.Errorf("unable to add vertex %v", err)
+	}
+
+	return &domain.ServiceRegistered{}, nil
+}
+
+// ServiceUpdated todo
+func (ac *AccessControl) ServiceUpdated(ctx context.Context, op *domain.UpdateRegisteredService) error {
+	// TODO:
+	// implement handler
+	return nil
+}
+
+// VerifyServiceAccess
+func (ac *AccessControl) VerifyServiceAccess(ctx context.Context, ace *domain.AccessControlEntry) error {
+
+	granted := ac.graph.TraverseAndValidateData(ace.Subject, ace.Resource, ace.Permission)
+	if granted {
+		return nil
+	}
+
+	return errors.New("access denied")
+}
+
+// VerifyUserAccess
+func (ac *AccessControl) VerifyUserAccess(ctx context.Context, ace *domain.AccessControlEntry) error {
+
+	granted := ac.graph.TraverseAndValidateData(ace.Subject, ace.Resource, ace.Permission)
+	if granted {
+		return nil
+	}
+
+	return errors.New("access denied")
 }

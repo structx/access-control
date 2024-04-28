@@ -5,45 +5,47 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/trevatk/anastasia/internal/core/domain"
-	pkgdomain "github.com/trevatk/go-pkg/domain"
 	"go.uber.org/multierr"
 	"go.uber.org/zap"
 	"golang.org/x/sync/errgroup"
+
+	"github.com/trevatk/anastasia/internal/core/domain"
+	pkgdomain "github.com/trevatk/go-pkg/domain"
 )
 
-// Bundle
+// Bundle application global
 type Bundle struct {
 	log *zap.SugaredLogger
 	ac  domain.AccessController
 	m   pkgdomain.MessageBroker
+	chs []<-chan pkgdomain.Envelope
 }
 
-// NewBundle
+// NewBundle constructor
 func NewBundle(logger *zap.Logger, accessControl domain.AccessController) *Bundle {
 	return &Bundle{
 		ac:  accessControl,
 		log: logger.Sugar().Named("AccessControlSubscriber"),
+		chs: make([]<-chan pkgdomain.Envelope, 0),
 	}
 }
 
-// Subscribe
+// Subscribe to subscriptions topics
 func (b *Bundle) Subscribe(ctx context.Context) error {
 
 	var result error
-	cs := make([]<-chan pkgdomain.Envelope, 0)
 
 	subs := domain.ListSubscriptions()
 	for _, sub := range subs {
 		t := sub.String()
 		ch, err := b.m.Subscribe(ctx, t)
 		if err != nil {
-			result = multierr.Append(result, fmt.Errorf("unable to subscribe to %s %v"))
+			result = multierr.Append(result, fmt.Errorf("unable to subscribe to %s %v", t, err))
 		}
-		cs = append(cs, ch)
+		b.chs = append(b.chs, ch)
 	}
 
-	ch := merge(ctx, cs...)
+	ch := merge(ctx, b.chs...)
 
 	g, ctx := errgroup.WithContext(ctx)
 	for i := 0; i < len(subs); i++ {
@@ -78,9 +80,11 @@ func (b *Bundle) subscriber(ctx context.Context, ch <-chan pkgdomain.Envelope) e
 			}
 
 			t := msg.GetTopic()
+			b.log.Debugf("received message for topic %s", t)
+
 			switch domain.Subscriptions(msg.GetTopic()) {
 			case domain.ModifyAccessControlList:
-				_, err = b.modifyAccessControlList(ctx, msg.GetPayload())
+				err = b.ac.ModifyAccessControlList(ctx, &domain.UpdateAccessControlList{})
 			default:
 				return errors.New("invalid topic " + t)
 			}
