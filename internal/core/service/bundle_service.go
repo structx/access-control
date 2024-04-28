@@ -21,12 +21,16 @@ type Bundle struct {
 	chs []<-chan pkgdomain.Envelope
 }
 
+// interface compliance
+var _ domain.Bundler = (*Bundle)(nil)
+
 // NewBundle constructor
-func NewBundle(logger *zap.Logger, accessControl domain.AccessController) *Bundle {
+func NewBundle(logger *zap.Logger, accessControl domain.AccessController, broker pkgdomain.MessageBroker) *Bundle {
 	return &Bundle{
 		ac:  accessControl,
 		log: logger.Sugar().Named("AccessControlSubscriber"),
 		chs: make([]<-chan pkgdomain.Envelope, 0),
+		m:   broker,
 	}
 }
 
@@ -60,6 +64,11 @@ func (b *Bundle) Subscribe(ctx context.Context) error {
 	}
 
 	return result
+}
+
+// Close external service connections
+func (b *Bundle) Close() error {
+	return b.m.Close()
 }
 
 func (b *Bundle) subscriber(ctx context.Context, ch <-chan pkgdomain.Envelope) error {
