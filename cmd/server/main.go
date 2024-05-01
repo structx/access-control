@@ -9,17 +9,17 @@ import (
 	"go.uber.org/fx"
 	"go.uber.org/multierr"
 
-	"github.com/trevatk/go-pkg/adapter/logging"
-	"github.com/trevatk/go-pkg/adapter/port/messagebroker"
-	"github.com/trevatk/go-pkg/adapter/setup"
-	pkgdomain "github.com/trevatk/go-pkg/domain"
-	"github.com/trevatk/go-pkg/util/decode"
+	"github.com/structx/go-pkg/adapter/logging"
+	"github.com/structx/go-pkg/adapter/port/messagebroker"
+	"github.com/structx/go-pkg/adapter/setup"
+	pkgdomain "github.com/structx/go-pkg/domain"
+	"github.com/structx/go-pkg/util/decode"
 
-	"github.com/trevatk/anastasia/internal/adapter/port/http/router"
-	"github.com/trevatk/anastasia/internal/adapter/port/rpc"
-	"github.com/trevatk/anastasia/internal/core/domain"
-	"github.com/trevatk/anastasia/internal/core/graph"
-	"github.com/trevatk/anastasia/internal/core/service"
+	"github.com/structx/access-control/internal/adapter/port/http/router"
+	"github.com/structx/access-control/internal/adapter/port/rpc"
+	"github.com/structx/access-control/internal/core/domain"
+	"github.com/structx/access-control/internal/core/graph"
+	"github.com/structx/access-control/internal/core/service"
 )
 
 func main() {

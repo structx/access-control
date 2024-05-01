@@ -9,8 +9,8 @@ import (
 	"go.uber.org/zap"
 	"golang.org/x/sync/errgroup"
 
-	"github.com/trevatk/anastasia/internal/core/domain"
-	pkgdomain "github.com/trevatk/go-pkg/domain"
+	"github.com/structx/access-control/internal/core/domain"
+	pkgdomain "github.com/structx/go-pkg/domain"
 )
 
 // Bundle application global

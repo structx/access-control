@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/trevatk/anastasia/internal/core/domain"
+	"github.com/structx/access-control/internal/core/domain"
 	"golang.org/x/crypto/sha3"
 )
 

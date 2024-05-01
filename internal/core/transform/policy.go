@@ -2,8 +2,8 @@
 package transform
 
 import (
-	"github.com/trevatk/anastasia/internal/adapter/port/rpc/msg"
-	"github.com/trevatk/anastasia/internal/core/domain"
+	"github.com/structx/access-control/internal/adapter/port/rpc/msg"
+	"github.com/structx/access-control/internal/core/domain"
 )
 
 // Policy transform rpc policy into application policy

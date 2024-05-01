@@ -9,9 +9,9 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	pb "github.com/trevatk/go-pkg/proto/messaging/v1"
+	pb "github.com/structx/go-pkg/proto/messaging/v1"
 
-	"github.com/trevatk/anastasia/internal/core/domain"
+	"github.com/structx/access-control/internal/core/domain"
 )
 
 // GRPCServer protobuf implementation of messaging service

@@ -1,11 +1,11 @@
-module github.com/trevatk/anastasia
+module github.com/structx/access-control
 
 go 1.22.2
 
 require (
 	github.com/go-chi/chi/v5 v5.0.12
 	github.com/stretchr/testify v1.8.4
-	github.com/trevatk/go-pkg v0.0.8
+	github.com/structx/go-pkg v0.0.2
 	go.uber.org/fx v1.21.1
 	go.uber.org/multierr v1.10.0
 	go.uber.org/zap v1.27.0

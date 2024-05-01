@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/suite"
-	"github.com/trevatk/anastasia/internal/core/service"
+	"github.com/structx/access-control/internal/core/service"
 )
 
 type AccessControlSuite struct {

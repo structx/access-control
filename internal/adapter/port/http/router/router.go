@@ -5,7 +5,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"go.uber.org/zap"
 
-	"github.com/trevatk/go-pkg/adapter/port/http/controller"
+	"github.com/structx/go-pkg/adapter/port/http/controller"
 )
 
 // New constructor

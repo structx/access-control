@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"slices"
 
-	"github.com/trevatk/anastasia/internal/core/domain"
+	"github.com/structx/access-control/internal/core/domain"
 )
 
 // AccessControl access controller implementation
